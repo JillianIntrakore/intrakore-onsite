@@ -1375,8 +1375,8 @@ $('#toastB').onclick=()=>{O.page='reports';O.view='detail';O.sel=REF;renderOffic
 /* On phones the camera or photo picker drops the browser out of full screen. Keep the full-screen layout and restore real full screen on the very next tap. */
 const fsWanted=()=>$('#stage').classList.contains('fs')||(document.body.classList.contains('app-wa')&&isM());
 function reFull(){if(STANDALONE||!fsWanted())return;const el=document.documentElement,rq=el.requestFullscreen||el.webkitRequestFullscreen;if(rq&&!(document.fullscreenElement||document.webkitFullscreenElement)){try{const r=rq.call(el);if(r&&r.catch)r.catch(()=>{})}catch(e){}}}
-function onFsChange(){const on=!!(document.fullscreenElement||document.webkitFullscreenElement);document.documentElement.classList.toggle('nfs',on);if(on)return;if(!fsWanted())return;if(isM()){document.addEventListener('pointerdown',reFull,{once:true,capture:true});return}exitFs()}
-document.addEventListener('fullscreenchange',onFsChange);document.addEventListener('webkitfullscreenchange',onFsChange);
+function onFsChange(){const on=!!(document.fullscreenElement||document.webkitFullscreenElement);document.documentElement.classList.toggle('nfs',on);if(on)return;if(!fsWanted())return;if(isM()){document.addEventListener('click',reFull,true);return}exitFs()}
+document.addEventListener('fullscreenchange',onFsChange);document.addEventListener('touchend',reFull,true);document.addEventListener('webkitfullscreenchange',onFsChange);
 
 /* ---------- autopilot ---------- */
 async function autoStep(){
@@ -1417,7 +1417,7 @@ function showSplash(){const s=$('#splash');s.hidden=false;s.classList.remove('ou
   const h=window.APP_MODE||location.hash.slice(1),wa=h==='whatsapp',dk=h==='intrakore';
   document.body.classList.toggle('app-wa',wa);document.body.classList.toggle('app-desk',dk);
   document.documentElement.classList.toggle('appmode',wa||dk);
-  if(wa){if(isM()){setTab('phone');if(!STANDALONE)document.addEventListener('pointerdown',reFull,{once:true,capture:true})}else enterFs()}
+  if(wa){if(isM()){setTab('phone');if(!STANDALONE)document.addEventListener('click',reFull,true)}else enterFs()}
   else if($('#stage').classList.contains('fs')&&!isM())exitFs();
   if(dk&&isM())setTab('desk');
   $('#mpanel').classList.remove('open');
